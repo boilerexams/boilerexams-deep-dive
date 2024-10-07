@@ -1,6 +1,15 @@
-import src
+"""
+Next Week's Exams
+=================
+
+Prints information for the next week of exams
+"""
+
 import datetime
+
 import polars as pl
+
+import src
 
 dfc = src.load_tables("course").select("id", "number", "abbreviation")
 dfe = (

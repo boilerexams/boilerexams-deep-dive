@@ -93,16 +93,16 @@ Plots
 
  .. code-block:: none
 
-    Total number of submissions: 2772024
-    Total video submissions: 410553
-    Total time taken: 1016610.28 hours
-    Total study hours < 10 mins: 65826.27
-    Total video hours < 10 mins: 8117.60
+    Total number of submissions: 2772414
+    Total video submissions: 411681
+    Total time taken: 1016796.42 hours
+    Total study hours < 10 mins: 65862.28
+    Total video hours < 10 mins: 8147.28
     Mean of valid study times: 1.71 minutes
     Mean of valid video times: 1.75 minutes
-    Extra time due to discounted study indices: 13098.77 hours
-    Extra time due to discounted video indices: 3889.42 hours
-    Total time: 90932.06 hours
+    Extra time due to discounted study indices: 13097.20 hours
+    Extra time due to discounted video indices: 3889.75 hours
+    Total time: 90996.51 hours
 
 
 
@@ -141,7 +141,7 @@ Submissions in the past 24 hours
 
  .. code-block:: none
 
-    Submissions in the past 24 hours: 2936
+    Submissions in the past 24 hours: 4181
 
 
 
@@ -291,7 +291,7 @@ Plot the time taken to complete each question and watch the video
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 19.097 seconds)
+   **Total running time of the script:** (0 minutes 19.146 seconds)
 
 
 .. _sphx_glr_download_gallery_plot.py:

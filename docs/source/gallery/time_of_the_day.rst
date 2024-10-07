@@ -71,7 +71,7 @@ Comparing MacOS and Windows studying activity throughout the day
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.108 seconds)
+   **Total running time of the script:** (0 minutes 0.903 seconds)
 
 
 .. _sphx_glr_download_gallery_time_of_the_day.py:

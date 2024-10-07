@@ -46,6 +46,40 @@ Examples
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Prints information for the next week of exams">
+
+.. only:: html
+
+  .. image:: /gallery/images/thumb/sphx_glr_next_exams_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_next_exams.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Next Week's Exams</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Statistics related to missing question videos">
+
+.. only:: html
+
+  .. image:: /gallery/images/thumb/sphx_glr_missing_videos_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_missing_videos.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Missing Videos</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Comparing To Previous Semesters">
 
 .. only:: html
@@ -90,6 +124,8 @@ Examples
 
    /gallery/best_os
    /gallery/time_of_the_day
+   /gallery/next_exams
+   /gallery/missing_videos
    /gallery/comparing_last_year
    /gallery/plot
 

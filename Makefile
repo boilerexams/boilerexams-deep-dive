@@ -11,6 +11,9 @@ format:
 rm-docs:
 	rm -rf docs/source/gallery
 	rm -rf docs/html
+
+add-path:
+	export PYTHONPATH="./:${PYTHONPATH}"
  
 docs: format sphinx
 docs-clean: rm-docs docs

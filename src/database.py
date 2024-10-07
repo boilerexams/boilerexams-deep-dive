@@ -70,7 +70,8 @@ def save_tables(table_names: Union[list[str], str]):
 class BoilerexamsDatabase:
     # with context manager
     def __init__(self):
-        dotenv.load_dotenv(".env.secret")
+        secret_path = os.path.join(os.environ['BX_SRC_DIR'], '..', '.env.secret')
+        dotenv.load_dotenv(secret_path)
 
         # SSH tunnel configuration
         self.SSH_HOST = os.environ["SSH_HOST"]

@@ -1,0 +1,206 @@
+{
+ "datetime.datetime.now": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "datetime.datetime",
+   "module_short": "datetime.datetime",
+   "name": "now"
+  }
+ ],
+ "datetime.timedelta": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "datetime",
+   "module_short": "datetime",
+   "name": "timedelta"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "datetime",
+   "module_short": "datetime",
+   "name": "timedelta"
+  }
+ ],
+ "datetime.timezone.utc": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "datetime",
+   "module_short": "datetime",
+   "name": "timezone"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "datetime.timezone",
+   "module_short": "datetime.timezone",
+   "name": "utc"
+  }
+ ],
+ "dfc": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.dataframe.frame",
+   "module_short": "polars",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.dataframe",
+   "module_short": "polars",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars",
+   "module_short": "polars",
+   "name": "DataFrame"
+  }
+ ],
+ "dfe": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.dataframe.frame",
+   "module_short": "polars",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.dataframe",
+   "module_short": "polars",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars",
+   "module_short": "polars",
+   "name": "DataFrame"
+  }
+ ],
+ "dfe.filter": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.dataframe.frame",
+   "module_short": "polars",
+   "name": "DataFrame.filter"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.dataframe",
+   "module_short": "polars",
+   "name": "DataFrame.filter"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars",
+   "module_short": "polars",
+   "name": "DataFrame.filter"
+  }
+ ],
+ "dfe.select": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.dataframe.frame",
+   "module_short": "polars",
+   "name": "DataFrame.select"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.dataframe",
+   "module_short": "polars",
+   "name": "DataFrame.select"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars",
+   "module_short": "polars",
+   "name": "DataFrame.select"
+  }
+ ],
+ "horizon": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "datetime",
+   "module_short": "datetime",
+   "name": "timedelta"
+  }
+ ],
+ "pl.col": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.functions.col",
+   "module_short": "polars.functions.col",
+   "name": "Col"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.functions",
+   "module_short": "polars.functions",
+   "name": "Col"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars",
+   "module_short": "polars",
+   "name": "Col"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars",
+   "module_short": "polars",
+   "name": "col"
+  }
+ ],
+ "src.load_tables": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "src",
+   "module_short": "src",
+   "name": "load_tables"
+  }
+ ],
+ "today": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "datetime",
+   "module_short": "datetime",
+   "name": "datetime"
+  }
+ ]
+}

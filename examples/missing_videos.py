@@ -1,15 +1,13 @@
-import src
+"""
+Missing Videos
+==============
+
+Statistics related to missing question videos
+"""
+
 import polars as pl
 
-# query = """
-# SELECT *
-#   FROM information_schema.columns
-#  WHERE table_name   = 'Resource'
-#      ;
-# """
-
-# print(src.exec_postgres_query(query))
-# endd
+import src
 
 query = """SELECT data, "explanationId"
 FROM public."Resource" 

@@ -39,13 +39,13 @@ Which operating system gets the most questions right, on average?
     │ str       ┆ f64            │
     ╞═══════════╪════════════════╡
     │           ┆ 44.444444      │
-    │ Linux     ┆ 58.415459      │
-    │ Android   ┆ 59.882627      │
-    │ iOS       ┆ 60.996739      │
-    │ Chrome OS ┆ 64.864159      │
-    │ OS X      ┆ 65.217942      │
-    │ Windows   ┆ 65.521325      │
-    │ Ubuntu    ┆ 65.85695       │
+    │ Linux     ┆ 58.258171      │
+    │ Android   ┆ 59.852081      │
+    │ iOS       ┆ 60.856852      │
+    │ Chrome OS ┆ 64.889467      │
+    │ OS X      ┆ 65.092175      │
+    │ Ubuntu    ┆ 65.458276      │
+    │ Windows   ┆ 65.495493      │
     │ Tizen     ┆ 75.0           │
     └───────────┴────────────────┘
 
@@ -79,7 +79,7 @@ Which operating system gets the most questions right, on average?
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.579 seconds)
+   **Total running time of the script:** (0 minutes 0.513 seconds)
 
 
 .. _sphx_glr_download_gallery_best_os.py:

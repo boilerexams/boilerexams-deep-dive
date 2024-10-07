@@ -34,12 +34,12 @@ Comparing To Previous Semesters
 
  .. code-block:: none
 
-    2023-08-21 2023-10-06
-    F23 168874
-    2024-01-19 2024-03-05
-    S24 314912
-    2024-08-19 2024-10-04
-    F24 554902
+    2023-08-21 2023-10-09
+    F23 173601
+    2024-01-19 2024-03-08
+    S24 348441
+    2024-08-19 2024-10-07
+    F24 555166
 
 
 
@@ -127,7 +127,7 @@ Comparing To Previous Semesters
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.281 seconds)
+   **Total running time of the script:** (0 minutes 0.292 seconds)
 
 
 .. _sphx_glr_download_gallery_comparing_last_year.py:

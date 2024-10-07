@@ -1,0 +1,11 @@
+bin
+lib
+include
+share
+*.csv
+*.secret
+*.cfg
+__pycache__
+.venv
+.DS_Store
+tables

@@ -1,0 +1,187 @@
+{
+ "df": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.dataframe.frame",
+   "module_short": "polars",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.dataframe",
+   "module_short": "polars",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars",
+   "module_short": "polars",
+   "name": "DataFrame"
+  }
+ ],
+ "df.group_by": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.dataframe.frame",
+   "module_short": "polars",
+   "name": "DataFrame.group_by"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.dataframe",
+   "module_short": "polars",
+   "name": "DataFrame.group_by"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars",
+   "module_short": "polars",
+   "name": "DataFrame.group_by"
+  }
+ ],
+ "pl.Float64": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "polars.datatypes.classes",
+   "module_short": "polars",
+   "name": "Float64"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "polars.datatypes",
+   "module_short": "polars",
+   "name": "Float64"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "polars",
+   "module_short": "polars",
+   "name": "Float64"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "polars.datatypes.classes",
+   "module_short": "polars.datatypes.classes",
+   "name": "FloatType"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "polars.datatypes",
+   "module_short": "polars.datatypes",
+   "name": "FloatType"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "polars",
+   "module_short": "polars",
+   "name": "FloatType"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "polars.datatypes.classes",
+   "module_short": "polars.datatypes.classes",
+   "name": "NumericType"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "polars.datatypes",
+   "module_short": "polars.datatypes",
+   "name": "NumericType"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "polars",
+   "module_short": "polars",
+   "name": "NumericType"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "polars.datatypes.classes",
+   "module_short": "polars",
+   "name": "DataType"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "polars.datatypes",
+   "module_short": "polars",
+   "name": "DataType"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "polars",
+   "module_short": "polars",
+   "name": "DataType"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars",
+   "module_short": "polars",
+   "name": "Float64"
+  }
+ ],
+ "pl.col": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.functions.col",
+   "module_short": "polars.functions.col",
+   "name": "Col"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars.functions",
+   "module_short": "polars.functions",
+   "name": "Col"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars",
+   "module_short": "polars",
+   "name": "Col"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "polars",
+   "module_short": "polars",
+   "name": "col"
+  }
+ ],
+ "src.load_tables": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "src",
+   "module_short": "src",
+   "name": "load_tables"
+  }
+ ]
+}

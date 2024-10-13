@@ -75,8 +75,6 @@ class BoilerexamsDatabase:
 
         # SSH tunnel configuration
         self.SSH_HOST = os.environ["SSH_HOST"]
-        self.SSH_USERNAME = os.environ["SSH_USERNAME"]
-        self.SSH_PEM_PATH = os.environ["SSH_PEM_PATH"]
         self.REMOTE_DB_HOST = os.environ["REMOTE_DB_HOST"]
         self.BIND_PORT = int(os.environ["BIND_PORT"])
 

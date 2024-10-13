@@ -78,8 +78,7 @@ class BoilerexamsDatabase:
         self.SSH_USERNAME = os.environ["SSH_USERNAME"]
         self.SSH_PEM_PATH = os.environ["SSH_PEM_PATH"]
         self.REMOTE_DB_HOST = os.environ["REMOTE_DB_HOST"]
-        self.REMOTE_DB_PORT = int(os.environ["REMOTE_DB_PORT"])
-        self.LOCAL_BIND_PORT = int(os.environ["LOCAL_BIND_PORT"])
+        self.BIND_PORT = int(os.environ["BIND_PORT"])
 
         # Database configuration
         self.DB_USERNAME = os.environ["DB_USERNAME"]
@@ -88,7 +87,7 @@ class BoilerexamsDatabase:
 
     def __enter__(self):
         # Construct the database connection string
-        self.db_connection_string = f"postgresql://{self.DB_USERNAME}:{self.DB_PASSWORD}@{self.SSH_HOST}:{self.LOCAL_BIND_PORT}/{self.DB_NAME}"
+        self.db_connection_string = f"postgresql://{self.DB_USERNAME}:{self.DB_PASSWORD}@{self.SSH_HOST}:{self.BIND_PORT}/{self.DB_NAME}"
 
         # Create SQLAlchemy engine
         self.engine = create_engine(self.db_connection_string)

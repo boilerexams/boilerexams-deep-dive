@@ -75,11 +75,8 @@ class BoilerexamsDatabase:
 
         # SSH tunnel configuration
         self.SSH_HOST = os.environ["SSH_HOST"]
-        self.SSH_USERNAME = os.environ["SSH_USERNAME"]
-        self.SSH_PEM_PATH = os.environ["SSH_PEM_PATH"]
         self.REMOTE_DB_HOST = os.environ["REMOTE_DB_HOST"]
-        self.REMOTE_DB_PORT = int(os.environ["REMOTE_DB_PORT"])
-        self.LOCAL_BIND_PORT = int(os.environ["LOCAL_BIND_PORT"])
+        self.BIND_PORT = int(os.environ["BIND_PORT"])
 
         # Database configuration
         self.DB_USERNAME = os.environ["DB_USERNAME"]
@@ -87,23 +84,12 @@ class BoilerexamsDatabase:
         self.DB_NAME = os.environ["DB_NAME"]
 
     def __enter__(self):
-        self.tunnel = SSHTunnelForwarder(
-            (self.SSH_HOST, 22),
-            ssh_username=self.SSH_USERNAME,
-            ssh_pkey=self.SSH_PEM_PATH,
-            remote_bind_address=(self.REMOTE_DB_HOST, self.REMOTE_DB_PORT),
-            local_bind_address=("localhost", self.LOCAL_BIND_PORT),
-        )
-        self.tunnel.start()
-        print(f"SSH tunnel established on local port {self.tunnel.local_bind_port}")
-
         # Construct the database connection string
-        self.db_connection_string = f"postgresql://{self.DB_USERNAME}:{self.DB_PASSWORD}@localhost:{self.tunnel.local_bind_port}/{self.DB_NAME}"
+        self.db_connection_string = f"postgresql://{self.DB_USERNAME}:{self.DB_PASSWORD}@{self.SSH_HOST}:{self.BIND_PORT}/{self.DB_NAME}"
 
         # Create SQLAlchemy engine
         self.engine = create_engine(self.db_connection_string)
         return self
-
+    
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.tunnel.stop()
         print("SSH tunnel stopped")

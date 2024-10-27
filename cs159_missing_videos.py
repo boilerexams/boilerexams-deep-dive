@@ -8,11 +8,11 @@ WHERE "type" = 'VIDEO'
 """
 
 dfr = src.exec_postgres_query(query)
-url_values = dfr.select(pl.col("data").struct["url"] == "")
-print(url_values.unique())
+#url_values = dfr.select(pl.col("data").struct["url"] == "")
+#print(url_values.unique())
 dfr = dfr.with_columns(yt_link=pl.col("data").struct[0]).drop("data")
-print(dfr["yt_link"])
-
+#print(dfr["yt_link"])
+print(dfr.null_count())
 
 dfq = src.load_tables("question")
 dfea = src.load_tables("exam")
@@ -64,6 +64,8 @@ final_df = main_df.join(dfr, on="explanationId", how = "inner")
 
 # Print the final DataFrame
 print(final_df)
+
+#make into feature
 
 
 

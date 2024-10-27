@@ -67,11 +67,29 @@ print(final_df)
 
 #make into feature
 
+# Step 1: Filter for rows where 'yt_link' is null
+df_missing_videos = final_df.filter(
+    pl.col("yt_link").is_null()
+)
 
+# Step 2: Group by 'topicId' and 'examId' to count missing videos
+df_summary = (
+    df_missing_videos
+    .groupby(["topicId", "examId"])
+    .agg([
+        pl.count("questionId").alias("missing_videos_count")
+    ])
+)
 
+# Step 3: Optionally, join with the topic table to get topic names
+df_result = df_summary.join(
+    dft.select(["topicId", "name"]), 
+    on="topicId", 
+    how="left"
+)
 
-
-
+# Step 4: Show the final result
+print(df_result)
 """
 dfq = (
     dfq.join(dfex, left_on="id", right_on="questionId")

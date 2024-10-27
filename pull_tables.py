@@ -14,7 +14,7 @@ table_names = [
     "Event",
     "Explanation",
     "AnswerChoice",
-    # "Submission",
+    "Submission",
 ]
 
 src.save_tables(table_names)

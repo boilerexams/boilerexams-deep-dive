@@ -23,7 +23,7 @@ start_last_fall = datetime.date(2023, 8, 21)
 start_last_spring = datetime.date(2024, 1, 19)
 
 now = datetime.date.today()
-total_days_this_year = now - start_this_fall
+total_days_this_year = datetime.timedelta(days=120)
 
 for start_date, label in [
     (start_last_fall, "F23"),
@@ -74,3 +74,4 @@ plt.legend()
 plt.grid()
 plt.tight_layout()
 plt.show()
+# plt.savefig('demo.png', transparent=True)

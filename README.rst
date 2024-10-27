@@ -1,7 +1,9 @@
 Installation
 ............
 
-After cloning, make a virtual environment with ``python3 -m venv .venv`` and activate it with ``source .venv/bin activate``.
+After cloning, make a virtual environment with ``python3 -m venv .venv`` and activate it with ``source .venv/bin/activate``.
+
+# Need to add stuff for installing postgres
 
 Install the requirements with ``pip install uv && uv pip install -r requirements.txt``.
 

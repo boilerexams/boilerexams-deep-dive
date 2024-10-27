@@ -1,5 +1,5 @@
 import polars as pl
-
+from pathlib import Path
 import src
 
 query = """SELECT data, "explanationId"
@@ -8,8 +8,13 @@ WHERE "type" = 'VIDEO'
 """
 
 dfr = src.exec_postgres_query(query)
-#url_values = dfr.select(pl.col("data").struct["url"] == "")
-#print(url_values.unique())
+current_dir = Path.cwd()
+
+# 2. Create the full path for the output file
+file_path = current_dir / "resources.parquet"
+dfr.write_parquet(file_path)
+url_values = dfr.select(pl.col("data").struct["url"] == "")
+print(url_values.unique())
 dfr = dfr.with_columns(yt_link=pl.col("data").struct[0]).drop("data")
 #print(dfr["yt_link"])
 print(dfr.null_count())
@@ -35,7 +40,7 @@ dfea = dfea.select([
 ])
 dft = dft.select([
     pl.col("id").alias("topicId"), 
-    pl.col("name"), 
+    pl.col("name").alias("topicName"), 
     pl.col("courseId")
 ])
 dfqtt = dfqtt.select([
@@ -60,36 +65,45 @@ df_q_e_qtt_t = df_q_e_qtt.join(dft, on=["topicId", "courseId"], how="inner")
 main_df = df_q_e_qtt_t.join(dfex, on="questionId", how="inner")
 
 #Step 6: Join the main dataframe with the resources on the explanationId
-final_df = main_df.join(dfr, on="explanationId", how = "inner")
+final_df = main_df.join(dfr, on="explanationId", how = "outer")
 
 # Print the final DataFrame
 print(final_df)
 
 #make into feature
 
-# Step 1: Filter for rows where 'yt_link' is null
+#Filter for rows where 'yt_link' is null
 df_missing_videos = final_df.filter(
     pl.col("yt_link").is_null()
 )
 
-# Step 2: Group by 'topicId' and 'examId' to count missing videos
+
+# Group by 'topicId' and 'examId' to count missing videos
 df_summary = (
     df_missing_videos
-    .groupby(["topicId", "examId"])
+    .group_by("topicName")
     .agg([
         pl.count("questionId").alias("missing_videos_count")
     ])
 )
 
-# Step 3: Optionally, join with the topic table to get topic names
+""" # Join with the topic table to get topic names
 df_result = df_summary.join(
     dft.select(["topicId", "name"]), 
     on="topicId", 
     how="left"
-)
+) """
 
-# Step 4: Show the final result
-print(df_result)
+#Show the final result
+print(df_summary)
+
+
+current_dir = Path.cwd()
+
+# 2. Create the full path for the output file
+file_path = current_dir / "output_file.parquet"
+
+df_summary.write_parquet(file_path)
 """
 dfq = (
     dfq.join(dfex, left_on="id", right_on="questionId")

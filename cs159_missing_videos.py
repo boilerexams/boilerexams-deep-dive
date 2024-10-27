@@ -65,10 +65,11 @@ df_q_e_qtt_t = df_q_e_qtt.join(dft, on=["topicId", "courseId"], how="inner")
 main_df = df_q_e_qtt_t.join(dfex, on="questionId", how="inner")
 
 #Step 6: Join the main dataframe with the resources on the explanationId
-final_df = main_df.join(dfr, on="explanationId", how = "outer")
+final_df = main_df.join(dfr, on="explanationId", how = "full")
 
 # Print the final DataFrame
 print(final_df)
+print(f"Final_df columns: {final_df.columns}")
 
 #make into feature
 
@@ -96,14 +97,11 @@ df_result = df_summary.join(
 
 #Show the final result
 print(df_summary)
+# Calculate the sum of missing_videos_count
+total_missing_videos = df_summary["missing_videos_count"].sum()
 
-
-current_dir = Path.cwd()
-
-# 2. Create the full path for the output file
-file_path = current_dir / "output_file.parquet"
-
-df_summary.write_parquet(file_path)
+# Print the total
+print(f"Total missing videos: {total_missing_videos}")
 """
 dfq = (
     dfq.join(dfex, left_on="id", right_on="questionId")

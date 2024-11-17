@@ -1,7 +1,8 @@
 import polars as pl
 from pathlib import Path
 import src
-
+#work on the ones where there are the most failures
+# check distinct question id for the question to topic id.
 query = """SELECT data, "explanationId"
 FROM public."Resource"
 WHERE "type" = 'VIDEO'
@@ -29,7 +30,8 @@ dfqtt = src.load_tables("questiontotopic")
 dfq = dfq.select([
     pl.col("id").alias("questionId"),
     pl.col("examId"),
-    pl.col("courseId")
+    pl.col("courseId"),
+    pl.col("stats")
 ])
 
 dfea = dfea.select([
@@ -62,7 +64,7 @@ df_q_e_qtt = df_q_e.join(dfqtt, on="questionId", how="inner")
 df_q_e_qtt_t = df_q_e_qtt.join(dft, on=["topicId", "courseId"], how="inner")
 
 # Step 5: Join with dfex on 'questionId' to add explanationId
-main_df = df_q_e_qtt_t.join(dfex, on="questionId", how="inner")
+main_df = df_q_e_qtt_t.join(dfex, on="questionId", how="outer")
 
 #Step 6: Join the main dataframe with the resources on the explanationId
 final_df = main_df.join(dfr, on="explanationId", how = "full")
@@ -70,6 +72,21 @@ final_df = main_df.join(dfr, on="explanationId", how = "full")
 # Print the final DataFrame
 print(final_df)
 print(f"Final_df columns: {final_df.columns}")
+print(f"DF null column values: {final_df["yt_link"].null_count()}")
+# Filter for rows where 'yt_link' is NULL
+null_rows = final_df.filter(
+    pl.col("yt_link").is_null()
+)
+
+# Print the rows with null values
+print(null_rows)
+
+# Save the filtered rows to a Parquet file
+current_dir = Path.cwd()
+file_path = current_dir / "null_rows.parquet"
+null_rows.write_parquet(file_path)
+
+print(f"Null rows written to {file_path}")
 
 #make into feature
 
@@ -88,12 +105,12 @@ df_summary = (
     ])
 )
 
-""" # Join with the topic table to get topic names
+"""# Join with the topic table to get topic names
 df_result = df_summary.join(
     dft.select(["topicId", "name"]), 
     on="topicId", 
     how="left"
-) """
+)"""
 
 #Show the final result
 print(df_summary)
@@ -102,6 +119,96 @@ total_missing_videos = df_summary["missing_videos_count"].sum()
 
 # Print the total
 print(f"Total missing videos: {total_missing_videos}")
+
+#connect missing videos to ones with the most missed questions
+#print(dfq.columns)
+
+#calculates average per question and the associated  topics
+# Step 1: Extract stats data from dfq
+dfq_stats = dfq.select([
+    pl.col("questionId").alias("questionId"),
+    pl.col("stats").struct["submissions"].alias("submissions"),
+    pl.col("stats").struct["submissionsCorrect"].alias("submissionsCorrect")
+])
+
+# Calculate percentage correct
+dfq_stats = dfq_stats.with_columns(
+    (pl.col("submissionsCorrect") / pl.col("submissions") * 100).alias("percentage_correct")
+)
+
+# Step 2: Join stats with df_missing_videos
+df_missing_videos = df_missing_videos.join(dfq_stats, on="questionId", how="left")
+
+# Step 3: Select the desired columns
+df_question_level = df_missing_videos.select([
+    pl.col("questionId"),
+    pl.col("topicName"),
+    pl.col("percentage_correct").alias("averagePercentCorrect"),
+    pl.col("submissions").alias("totalSubmissions"),
+    pl.col("submissionsCorrect").alias("correctSubmissions")
+])
+
+# Step 4: Filter out rows where total or correct submissions are NULL
+df_question_level_cleaned = df_question_level.filter(
+    ~(
+        pl.col("totalSubmissions").is_null() |
+        pl.col("correctSubmissions").is_null()
+    )
+)
+
+# Step 5: Save the cleaned DataFrame to a Parquet file
+cleaned_file_path = current_dir / "question_level_missing_videos_cleaned.parquet"
+df_question_level_cleaned.write_parquet(cleaned_file_path)
+
+# Step 6: Print a preview of the cleaned DataFrame and file path
+print(df_question_level_cleaned.head())
+print(f"Cleaned data written to {cleaned_file_path}")
+
+
+
+#does by calculating mean topic score
+"""
+# Step 1: Extract stats data from dfq
+dfq_stats = dfq.select([
+    pl.col("questionId").alias("questionId"),
+    pl.col("stats").struct["submissions"].alias("submissions"),
+    pl.col("stats").struct["submissionsCorrect"].alias("submissionsCorrect")
+])
+
+# Calculate percentage correct
+dfq_stats = dfq_stats.with_columns(
+    (pl.col("submissionsCorrect") / pl.col("submissions") * 100).alias("percentage_correct")
+)
+
+# Step 2: Join stats with df_missing_videos
+df_missing_videos = df_missing_videos.join(dfq_stats, on="questionId", how="left")
+
+# Step 3: Group by topicName to summarize stats
+df_summary_stats = (
+    df_missing_videos
+    .group_by("topicName")
+    .agg([
+        pl.count("questionId").alias("missing_videos_count"),
+        pl.mean("percentage_correct").alias("avg_percentage_correct"),
+        pl.sum("submissions").alias("total_submissions"),
+        pl.sum("submissionsCorrect").alias("total_correct_submissions")
+    ])
+)
+
+# Show the result
+print(df_summary_stats)
+
+# Save the summary to a Parquet file
+summary_file_path = current_dir / "missing_videos_summary.parquet"
+df_summary_stats.write_parquet(summary_file_path)
+print(f"Summary written to {summary_file_path}")
+
+# Step 4: Calculate total missing videos for all topics
+total_missing_videos = df_summary_stats["missing_videos_count"].sum()
+print(f"Total missing videos: {total_missing_videos}")
+"""
+
+#previous work bad
 """
 dfq = (
     dfq.join(dfex, left_on="id", right_on="questionId")

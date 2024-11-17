@@ -1,109 +1,65 @@
-import matplotlib.pyplot as plt
 import polars as pl
+from pathlib import Path
+import src
 
-#Reads different tables
-pd_df = pl.read_parquet('tables/Course.parquet')
-df = pl.read_parquet('tables/Course.parquet')
-question_t = pl.read_parquet("tables/Question.parquet")
-exam_t = pl.read_parquet("tables/Exam.parquet")
+# Step 1: Load the video resources data, selecting only those with 'VIDEO' type
+query = """SELECT data, "explanationId" FROM public."Resource" WHERE "type" = 'VIDEO'"""
+dfr = src.exec_postgres_query(query)
 
-#submission = pl.read_parquet("tables/Submission.parquet")
+# Parse and store video link in a separate column
+dfr = dfr.with_columns(yt_link=pl.col("data").struct[0]).drop("data")
 
-#Can add custom course
-cid = "15900"
-cname ="CS"
+# Load other relevant tables
+dfq = src.load_tables("question")
+dfea = src.load_tables("exam")
+dfex = src.load_tables("explanation")
+dft = src.load_tables("topic")
+dfqtt = src.load_tables("questiontotopic")
 
-filtered_df = df.filter(
-     (pl.col('number') == int(cid)) &
-     (pl.col('abbreviation') == cname)
-  )
-if not filtered_df.is_empty():
-    id = filtered_df['id'].unique()[0]
-else:
-    exit("Number or name entered incorrectly")
+# Filter and rename columns as needed
+dfq = dfq.select([pl.col("id").alias("questionId"), pl.col("examId"), pl.col("courseId")])
+dfea = dfea.select([pl.col("id").alias("examId"), pl.col("courseId"), pl.col("season"), pl.col("year")])
+dft = dft.select([pl.col("id").alias("topicId"), pl.col("name").alias("topicName"), pl.col("courseId")])
+dfqtt = dfqtt.select([pl.col("questionId"), pl.col("topicId")])
+dfex = dfex.select([pl.col("id").alias("explanationId"), pl.col("questionId")])
 
-filtered = question_t.filter(pl.col("courseId") == id)
-#print(filtered.columns)
-qids = set(filtered['id'])
-#print(qids)
-""" import matplotlib.pyplot as plt
-import polars as pl
-import datetime
+# Step 2: Join data frames to include exams and topics
+df_q_e = dfq.join(dfea, on=["examId", "courseId"], how="left")
+df_q_e_qtt = df_q_e.join(dfqtt, on="questionId", how="left")
+df_q_e_qtt_t = df_q_e_qtt.join(dft, on=["topicId", "courseId"], how="left")
 
-#Reads different tables
-df = pl.read_parquet("tables\\Course.parquet")
-question_t = pl.read_parquet("tables\\Question.parquet")
-submission = pl.read_parquet("tables\\Submission.parquet")
+# Step 3: Add explanationId to the main DataFrame
+main_df = df_q_e_qtt_t.join(dfex, on="questionId", how="left")
 
-#Can add custom course and exam date
-cid = "15900"
-cname ="CS"
-exam_d = "2024-04-01 20:00:00"
+# Step 4: Join with the resources to include video links
+final_df = main_df.join(dfr, on="explanationId", how="left")
 
+# Step 5: Filter rows with missing videos (yt_link is null)
+df_missing_videos = final_df.filter(pl.col("yt_link").is_null())
 
-filtered_df = df.filter(
-      (pl.col('number') == int(cid)) &
-      (pl.col('abbreviation') == cname)
-  )
-
-if not filtered_df.is_empty():
-    id = filtered_df['id'].unique()[0]
-else:
-    exit("Number or name entered incorrectly")
-
-filtered = question_t.filter(pl.col("courseId") == id)
-qids = set(filtered['id'])
-filtered_df = submission.filter(pl.col("questionId").is_in(qids))
-filtered_df = filtered_df.filter(pl.col("userSolution") != [])
-delta_0 = datetime.timedelta(hours=0)
-delta_48 = datetime.timedelta(hours=48)
-
-
-filtered_df = filtered_df.with_columns(
-    rounded_time=filtered_df["timeEnded"].dt.round("1h")
+# Step 6: Aggregate missing video counts by topic and exam
+df_topic_summary = (
+    df_missing_videos
+    .group_by("topicName")
+    .agg([pl.count("questionId").alias("missing_videos_count")])
 )
 
-# Filter based on timeEnded being within 48 hours
-filtered_df = filtered_df.filter(
-    (exam_obj - pl.col("rounded_time")>= delta_0) &
-    (exam_obj - pl.col("rounded_time")<= delta_48)
+df_exam_summary = (
+    df_missing_videos
+    .group_by("examId")
+    .agg([pl.count("questionId").alias("missing_videos_count")])
 )
-print(filtered_df)
-correct_num = filtered_df.filter(pl.col("correct") == True)
-grouped_df_total = filtered_df.group_by("rounded_time").agg(pl.len())
-grouped_df_correct = correct_num.group_by("rounded_time").agg(pl.len())
-date_string = submission['timeEnded'][0]
-date_string = date_string.replace(microsecond=0)
 
-all_values = grouped_df_total['rounded_time'].to_list()
-dict1 = {}
-for each in all_values:
-    inter = grouped_df_correct.filter(pl.col('rounded_time') == each)
-    a = inter['len']
-    if(len(a) != 0):
-        inter1 = grouped_df_total.filter(pl.col('rounded_time') == each)
-        b= inter1['len'][0]
-        dict1[each] = a[0]/b
-    else:
-        dict1[each] = 0
+# Save results to Parquet files for further analysis or reporting
+current_dir = Path.cwd()
+topic_file_path = current_dir / "missing_videos_by_topic.parquet"
+exam_file_path = current_dir / "missing_videos_by_exam.parquet"
+df_topic_summary.write_parquet(topic_file_path)
+df_exam_summary.write_parquet(exam_file_path)
 
-dict2 = {}
-for key,val in dict1.items():
-    delta = exam_obj-key
-    delta = delta.total_seconds()/3600
-    dict2[delta] = val
+print(f"Topic summary written to {topic_file_path}")
+print(f"Exam summary written to {exam_file_path}")
 
-sorted_dict = dict(sorted(dict2.items()))
-x = list(sorted_dict.keys())
-y = list(sorted_dict.values())
-
-# Create the plot
-plt.scatter(x, y, marker='o')
-plt.xlabel('Hours till Exam')
-plt.ylabel('Student Accuracy')
-plt.title('Hours vs Accuracy')
-plt.gca().invert_xaxis()
-# Show the plot
-plt.show() 
-
- """
+# Summarize total missing videos across topics and exams
+total_missing_videos = df_topic_summary["missing_videos_count"].sum()
+print(f"Total missing videos: {total_missing_videos}")

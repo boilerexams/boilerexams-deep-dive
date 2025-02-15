@@ -15,17 +15,23 @@ current_dir = Path.cwd()
 file_path = current_dir / "resources.parquet"
 dfr.write_parquet(file_path)
 url_values = dfr.select(pl.col("data").struct["url"] == "")
-print(url_values.unique())
+#print(url_values.unique())
 dfr = dfr.with_columns(yt_link=pl.col("data").struct[0]).drop("data")
 #print(dfr["yt_link"])
-print(dfr.null_count())
+#print(dfr.null_count())
 
 dfq = src.load_tables("question")
 dfea = src.load_tables("exam")
 dfex = src.load_tables("explanation")
 dfc = src.load_tables("course")
+#print(f"dfc cols: {dfc.columns}")
 dft = src.load_tables("topic")
 dfqtt = src.load_tables("questiontotopic")
+
+dfc = dfc.select([
+    pl.col("id").alias("courseId"),
+    pl.col("name").alias("CourseName")
+])
 
 dfq = dfq.select([
     pl.col("id").alias("questionId"),
@@ -70,16 +76,16 @@ main_df = df_q_e_qtt_t.join(dfex, on="questionId", how="outer")
 final_df = main_df.join(dfr, on="explanationId", how = "full")
 
 # Print the final DataFrame
-print(final_df)
-print(f"Final_df columns: {final_df.columns}")
-print(f"DF null column values: {final_df["yt_link"].null_count()}")
+#print(final_df)
+#print(f"Final_df columns: {final_df.columns}")
+#print(f"DF null column values: {final_df["yt_link"].null_count()}")
 # Filter for rows where 'yt_link' is NULL
 null_rows = final_df.filter(
     pl.col("yt_link").is_null()
 )
 
 # Print the rows with null values
-print(null_rows)
+#print(null_rows)
 
 # Save the filtered rows to a Parquet file
 current_dir = Path.cwd()
@@ -113,12 +119,12 @@ df_result = df_summary.join(
 )"""
 
 #Show the final result
-print(df_summary)
+#print(df_summary)
 # Calculate the sum of missing_videos_count
 total_missing_videos = df_summary["missing_videos_count"].sum()
 
 # Print the total
-print(f"Total missing videos: {total_missing_videos}")
+#print(f"Total missing videos: {total_missing_videos}")
 
 #connect missing videos to ones with the most missed questions
 #print(dfq.columns)
@@ -138,30 +144,33 @@ dfq_stats = dfq_stats.with_columns(
 
 # Step 2: Join stats with df_missing_videos
 df_missing_videos = df_missing_videos.join(dfq_stats, on="questionId", how="left")
-
+#print(df_missing_videos.shape)
+df_missing_videos = df_missing_videos.join(dfc, on="courseId", how="left")
+#print(df_missing_videos.shape)
 # Step 3: Select the desired columns
 df_question_level = df_missing_videos.select([
     pl.col("questionId"),
+    pl.col("CourseName").alias("Course Name"),
     pl.col("topicName"),
-    pl.col("percentage_correct").alias("averagePercentCorrect"),
-    pl.col("submissions").alias("totalSubmissions"),
-    pl.col("submissionsCorrect").alias("correctSubmissions")
+    pl.col("percentage_correct").alias("Average Percent Correct"),
+    pl.col("submissions").alias("Total Submissions"),
+    pl.col("submissionsCorrect").alias("Correct Submissions")
 ])
 
-# Step 4: Filter out rows where total or correct submissions are NULL
+# Step 4: Filter out rows where questionId and topicName are NULL/empty
 df_question_level_cleaned = df_question_level.filter(
     ~(
-        pl.col("totalSubmissions").is_null() |
-        pl.col("correctSubmissions").is_null()
+        pl.col("questionId").is_null() |
+        pl.col("topicName").is_null()
     )
 )
 
 # Step 5: Save the cleaned DataFrame to a Parquet file
-cleaned_file_path = current_dir / "question_level_missing_videos_cleaned.parquet"
+cleaned_file_path = current_dir / "question_level_missing_videos_cleaned_with_course_name.parquet"
 df_question_level_cleaned.write_parquet(cleaned_file_path)
 
 # Step 6: Print a preview of the cleaned DataFrame and file path
-print(df_question_level_cleaned.head())
+#print(df_question_level_cleaned.head())
 print(f"Cleaned data written to {cleaned_file_path}")
 
 
